@@ -8,7 +8,7 @@ data:InferenceV a owlunit:InferenceVerification ;
 		PREFIX  ex: <https://who.int/WHO-Decision/data#>
 		PREFIX undo: <https://w3id.org/un/ontology/undo#>  
 		ASK { ex:DirectorGeneral a undo:Agent }" ;
-	""""
+	"""
 	owlunit:hasReasoner owlunit:HermiT ;
 	owlunit:hasExpectedResult true ;
  	owlunit:testsOntology who: .
