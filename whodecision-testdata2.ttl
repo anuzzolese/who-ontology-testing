@@ -1,4 +1,4 @@
-@prefix who: <https://who.int/WHO-Decision/ontology#> .
+@prefix who: <https://who.int/WHO-Decision/ontology/> .
 @prefix ex: <https://who.int/WHO-Decision/data#> .
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -21,23 +21,23 @@ ex:Resolution1en a undo:DocumentVersion ;
 ex:english a undo:Language ;
     rdfs:label "en" .
 
-ex:Request1 a owl:NamedIndividual
+ex:Request1 a owl:NamedIndividual ;
     pwo:hasStep ex:Step1, ex:Step2 ;
     who:hasTopic ex:Topic1 .
     
-ex:Step1 a owl:NamedIndividual
+ex:Step1 a owl:NamedIndividual ;
     pwo:executes ex:Action1 ;
     who:hasRelatedEvent ex:Event1 ;
     who:hasAgentRole ex:Role1 .
     
-ex:Step2 a owl:NamedIndividual
+ex:Step2 a owl:NamedIndividual ;
     pwo:executes ex:Action2 .
 
-ex:Action1 a owl:NamedIndividual
+ex:Action1 a owl:NamedIndividual ;
     dct:description "Submit a report to WHA77" ;
     who:hasStatus who:completed .
 
-ex:Action2 a owl:NamedIndividual
+ex:Action2 a owl:NamedIndividual ;
     dct:description "Conduct a survey on malaria elimination" .
 
 ex:Event1 a who:Event ;
@@ -49,7 +49,7 @@ ex:Role1 a who:AgentRole ;
     dct:description "Addressee of the request" ;
     who:withRole who:addressee .
 
-ex:DirectorGeneral a owl:NamedIndividual
+ex:DirectorGeneral a owl:NamedIndividual ;
     dct:title "Director-General of WHO" .
 
 ex:Topic1 a who:Topic ;

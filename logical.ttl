@@ -1,0 +1,14 @@
+@prefix owlunit: <https://w3id.org/OWLunit/ontology/> .
+@prefix data: <https://who.int/WHO-Decision/data/> .
+@prefix who: <https://who.int/WHO-Decision/ontology/> .
+
+data:InferenceV a owlunit:InferenceVerification ;
+	owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata2.ttl> ;
+	owlunit:hasSPARQLUnitTest """
+		PREFIX  ex: <https://who.int/WHO-Decision/data#>
+		PREFIX undo: <https://w3id.org/un/ontology/undo#>  
+		ASK { ex:DirectorGeneral a undo:Agent }" ;
+	""""
+	owlunit:hasReasoner owlunit:HermiT ;
+	owlunit:hasExpectedResult true ;
+ 	owlunit:testsOntology who: .
