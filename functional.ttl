@@ -1,0 +1,323 @@
+@prefix owlunit: <http://www.ontologydesignpatterns.org/cp/owl/owlunit#> .
+@prefix ex: <http://example.org/testcases#> .
+@prefix who: <https://who.int/WHO-Decision/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+### Test Case for CQ1: What are the requests in a given WHO resolution or decision?
+
+ex:CQ1_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What are the requests in a given WHO resolution or decision?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        
+        SELECT ?request
+        WHERE {
+          ex:Resolution1en dul:hasPart ?request .
+            ?request a who:Request .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+    {
+      "head": {
+        "vars": [ "request" ]
+      } ,
+      "results": {
+        "bindings": [
+          {
+            "request": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Request1" }
+          }
+        ]
+      }
+    }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ2: What are the actions required by a request?
+
+ex:CQ2_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What are the actions required by a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        
+        SELECT ?action
+        WHERE {
+          ex:Request1 pwo:hasStep ?step .
+            ?step pwo:executes ?action .
+              ?action a who:RequestAction .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+    {
+      "head": {
+        "vars": [ "action" ]
+      } ,
+      "results": {
+        "bindings": [
+          {
+            "action": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Action1" }
+          } ,
+          {
+            "action": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Action2" }
+          }
+        ]
+      }
+    }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ3: What are the events associated with a request?
+
+ex:CQ3_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What are the events associated with a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        
+        SELECT ?event
+        WHERE {
+          ex:Request1 pwo:hasStep ?step .
+            ?step who:hasRelatedEvent ?event .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "event" ]
+          } ,
+          "results": {
+            "bindings": [
+              {
+                "event": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Event1" }
+              }
+            ]
+          }
+        }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ4: What are the temporal constraints of a request?
+
+ex:CQ4_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What are the temporal constraints of a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+
+		SELECT ?request ?date
+		WHERE {
+		  ?request pwo:hasStep ?step .
+		    ?step who:hasRelatedEvent ?event .
+		      ?event who:atTime ?date .
+		}
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+              "vars": [ "request" , "date" ]
+          } ,
+          "results": {
+              "bindings": [
+                    {
+                        "request": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Request1" } ,
+                        "date": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#date" , "value": "2024-05-20" }
+                    }
+                ]
+        	}
+    	}
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ5: Who is involved in a request?
+
+ex:CQ5_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "Who is involved in a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        
+        SELECT ?agent
+        WHERE {
+          ex:Request1 pwo:hasStep ?step .
+          ?step who:hasAgentRole ?role .
+          ?role who:forAgent ?agent .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "agent" ]
+          } ,
+          "results": {
+            "bindings": [
+              {
+                "agent": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#DirectorGeneral" }
+              }
+            ]
+          }
+        }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ6: Which role is played by an agent involved in a request?
+
+ex:CQ6_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "Which role is played by an agent involved in a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        
+        SELECT ?agent ?roleType
+        WHERE {
+          ex:Request1 pwo:hasStep ?step .
+          ?step who:hasAgentRole ?role .
+          ?role who:forAgent ?agent ;
+                who:withRole ?roleType .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "agent" , "roleType" ]
+          } ,
+          results": {
+            "bindings": [
+              {
+                "agent": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#DirectorGeneral" } ,
+                "roleType": { "type": "uri" , "value": "https://who.int/WHO-Decision/ontology#addressee" }
+              }
+            ]
+        }
+      }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ7: What is the topic of a request?
+
+ex:CQ7_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What is the topic of a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        PREFIX dct: <http://purl.org/dc/terms/>
+        
+        SELECT ?topic
+        WHERE {
+          ex:Request1 who:hasTopic ?topic .
+          ?topic a who:Topic ;
+                 dct:title ?title .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "topic" ]
+          } ,
+          "results": {
+            "bindings": [
+              {
+                "topic": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Topic1" }
+              }
+            ]
+          }
+        }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ8: What is the current status of a request?
+
+ex:CQ8_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "What is the current status of a request?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        
+        SELECT ?action ?status
+        WHERE {
+          ex:Request1 pwo:hasStep ?step .
+          ?step pwo:executes ?action .
+          ?action who:hasStatus ?status .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "action" , "status" ]
+          } ,
+          "results": {
+            "bindings": [
+              {
+                "action": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Action1" } ,
+                "status": { "type": "uri" , "value": "https://who.int/WHO-Decision/ontology#completed" }
+              }
+            ]
+          }
+        }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
+
+### Test Case for CQ9: Which versions of a WHO resolution or decision are available?
+
+ex:CQ9_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
+    owlunit:hasCompetencyQuestion "Which versions of a WHO resolution or decision are available?" ;
+    owlunit:hasSPARQLUnitTest """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ex: <https://who.int/WHO-Decision/data#> 
+        PREFIX who: <https://who.int/WHO-Decision/ontology#>
+        PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+        PREFIX pwo: <http://purl.org/spar/pwo/>
+        PREFIX dct: <http://purl.org/dc/terms/>
+        
+        SELECT ?version ?language ?format
+        WHERE {
+          ex:Resolution1 who:hasRealization ?version .
+          ?version dct:language ?language ;
+                   dct:format ?format .
+        }
+    """ ;
+    owlunit:hasExpectedResult """
+        {
+          "head": {
+            "vars": [ "version" , "language" , "format" ]
+          } ,
+          "results": {
+            "bindings": [
+              {
+                "version": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Version1" } ,
+                "language": { "type": "literal" , "value": "en" } ,
+                "format": { "type": "literal" , "value": "PDF" }
+              } ,
+              {
+                "version": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Version2" } ,
+                "language": { "type": "literal" , "value": "fr" } ,
+                "format": { "type": "literal" , "value": "HTML" }
+              }
+            ]
+          }
+        }
+    """ ;
+    owlunit:hasInputData <https://raw.githubusercontent.com/anuzzolese/who-ontology-testing/refs/heads/master/whodecision-testdata.ttl> .
