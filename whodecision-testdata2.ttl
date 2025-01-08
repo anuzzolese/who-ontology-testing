@@ -1,0 +1,55 @@
+@prefix who: <https://who.int/WHO-Decision/ontology#> .
+@prefix ex: <https://who.int/WHO-Decision/data#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix allot: <https://w3id.org/akn/ontology/allot/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix pwo: <http://purl.org/spar/pwo/> .
+@prefix undo: <https://w3id.org/un/ontology/undo#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+### CQ1: Requests in a given WHO resolution or decision
+ex:Resolution1 a undo:Resolution ;
+    allot:hasRealization ex:Resolution1en . 
+    
+ex:Resolution1en a undo:DocumentVersion ;
+    dul:hasPart ex:Request1 ;
+    dct:language ex:english ;
+    dct:format "PDF" .
+    
+ex:english a undo:Language ;
+    rdfs:label "en" .
+
+ex:Request1
+    pwo:hasStep ex:Step1, ex:Step2 ;
+    who:hasTopic ex:Topic1 .
+    
+ex:Step1
+    pwo:executes ex:Action1 ;
+    who:hasRelatedEvent ex:Event1 ;
+    who:hasAgentRole ex:Role1 .
+    
+ex:Step2
+    pwo:executes ex:Action2 .
+
+ex:Action1
+    dct:description "Submit a report to WHA77" ;
+    who:hasStatus who:completed .
+
+ex:Action2
+    dct:description "Conduct a survey on malaria elimination" .
+
+ex:Event1 a who:Event ;
+    dct:description "World Health Assembly 77" ;
+    who:atTime "2024-05-20"^^xsd:date .
+
+ex:Role1 a who:AgentRole ;
+    who:forAgent ex:DirectorGeneral ;
+    dct:description "Addressee of the request" ;
+    who:withRole who:addressee .
+
+ex:DirectorGeneral
+    dct:title "Director-General of WHO" .
+
+ex:Topic1 a who:Topic ;
+    dct:title "Malaria Elimination" .
