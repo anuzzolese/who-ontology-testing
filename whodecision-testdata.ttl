@@ -9,12 +9,13 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 ### CQ1: Requests in a given WHO resolution or decision
-ex:Resolution1 a who:Resolution ;
+ex:Resolution1 a undo:Resolution ;
     allot:hasRealization ex:Resolution1en . 
     
-ex:Resolution1en
+ex:Resolution1en a undo:DocumentVersion ;
     dul:hasPart ex:Request1 ;
-    dct:language ex:english .
+    dct:language ex:english ;
+    dct:format "PDF" .
     
 ex:english a undo:Language ;
     rdfs:label "en" .
@@ -47,18 +48,8 @@ ex:Role1 a who:AgentRole ;
     dct:description "Addressee of the request" ;
     who:withRole who:addressee .
 
-ex:DirectorGeneral a who:Agent ;
+ex:DirectorGeneral a undo:Agent ;
     dct:title "Director-General of WHO" .
 
 ex:Topic1 a who:Topic ;
     dct:title "Malaria Elimination" .
-
-ex:Resolution1 who:hasRealization ex:Version1, ex:Version2 .
-
-ex:Version1 a who:DocumentVersion ;
-    dct:language "en" ;
-    dct:format "PDF" .
-
-ex:Version2 a who:DocumentVersion ;
-    dct:language "fr" ;
-    dct:format "HTML" .

@@ -222,7 +222,7 @@ ex:CQ7_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
         PREFIX pwo: <http://purl.org/spar/pwo/>
         PREFIX dct: <http://purl.org/dc/terms/>
         
-        SELECT ?topic
+        SELECT ?topic ?title
         WHERE {
           ex:Request1 who:hasTopic ?topic .
           ?topic a who:Topic ;
@@ -232,12 +232,13 @@ ex:CQ7_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
     owlunit:hasExpectedResult """
         {
           "head": {
-            "vars": [ "topic" ]
+            "vars": [ "topic", "title" ]
           } ,
           "results": {
             "bindings": [
               {
-                "topic": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Topic1" }
+                "topic": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Topic1" } , 
+                "title": { "type": "literal" , "value": "Malaria Elimination" }
               }
             ]
           }
@@ -291,12 +292,14 @@ ex:CQ9_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
         PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
         PREFIX pwo: <http://purl.org/spar/pwo/>
         PREFIX dct: <http://purl.org/dc/terms/>
+        PREFIX allot: <https://w3id.org/akn/ontology/allot/>
         
-        SELECT ?version ?language ?format
+        SELECT ?version ?lang ?format
         WHERE {
-          ex:Resolution1 who:hasRealization ?version .
+          ?resolution allot:hasRealization ?version .
           ?version dct:language ?language ;
                    dct:format ?format .
+          ?language rdfs:label ?lang
         }
     """ ;
     owlunit:hasExpectedResult """
@@ -307,14 +310,9 @@ ex:CQ9_TestCase rdf:type owlunit:CompetencyQuestionVerification ;
           "results": {
             "bindings": [
               {
-                "version": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Version1" } ,
+                "version": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Resolution1en" } ,
                 "language": { "type": "literal" , "value": "en" } ,
                 "format": { "type": "literal" , "value": "PDF" }
-              } ,
-              {
-                "version": { "type": "uri" , "value": "https://who.int/WHO-Decision/data#Version2" } ,
-                "language": { "type": "literal" , "value": "fr" } ,
-                "format": { "type": "literal" , "value": "HTML" }
               }
             ]
           }
